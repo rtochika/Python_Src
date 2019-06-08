@@ -12,7 +12,6 @@ print("　RPAのことならダックにおまかせロボ　Ver1.000")
 print("　左クリックでカーソルの座標取得")
 print("　右クリックでテキスト入力位置の座標取得")
 print("　終了すると【d:/tmp/py_src_cod.txt】を出力します")
-print("　既に【d:/tmp/py_src_cod.txt】がある場合は事前に削除しておいて下さい")
 print("#--------------------------------------------------------------------#")
 #--------------------------------------------------------------------------*
 
@@ -63,6 +62,9 @@ def say_hello():#左ボタンクリック
     pos_xy = mouse.get_position()
     print(pos_xy[0],pos_xy[1])
     cntr=cntr+1
+    #abc=input("入力！")
+    #print("aabc",abc)
+    #pyautogui.prompt("AAAA!")
     prnt = "print('--------------【●●をクリックしました】-------------------')" + "#["+str(+cntr)+"]"
     moving="\n"+"pyautogui.moveTo("+str(pos_xy[0])+","+ str(pos_xy[1])+",0.5)"
     py_pos_src = prnt + moving + "\n" + "pyautogui.click(" + str(pos_xy[0]) + "," + str(pos_xy[1]) + ")" + "\n" + "time.sleep("+str(TIME_SLEEP)+")" + "\n\n"  # 改行コード含む
@@ -118,9 +120,9 @@ pyautogui.alert('記録を開始しますか？')#プログラムストップ：
 strt_flg = 1
 
 #---------------------------------------------------
+if __name__ == '__main__':
+    while(loop):
+        pyautogui.alert('操作記録を開始しました!!\n終了するにはOKボタンをクリック')  # プログラムストップ：OKボタンのクリックを待つ
+        loop=0
 
-while(loop):
-    pyautogui.alert('操作記録を開始しました。\n終了するにはOKボタンをクリック')  # プログラムストップ：OKボタンのクリックを待つ
-    loop=0
-
-out_src_file()
+    out_src_file()
