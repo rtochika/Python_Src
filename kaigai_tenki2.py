@@ -2,9 +2,9 @@ import time
 from selenium import webdriver
 import pyautogui
 import openpyxl
-import sys
+import csv
 
-deb_flg =0 # 1:ON 0:OFF
+deb_flg =0# 1:ON 0:OFF
 #【機能】---------------------------------------------------*
 #海外現地法人の収支実績を転記する
 # インプット・アウトプット対比表 → http://bit.ly/2XDFG9J
@@ -13,34 +13,33 @@ deb_flg =0 # 1:ON 0:OFF
 pyautogui.alert("海外現法PLデータ転記を開始します","Excel_Move_Dta")#プログラム開始確認
 #-----------------------------------------------------------------------------------------#
 #ファイル名処理-----------------------------------------------------------*
-f = open('kaig_ten_input_file.txt','r', encoding='utf-8')
-data1 = f.read()  # ファイル終端まで全て読んだデータを返す
-f.close()
-print(type(data1)) # 文字列データ
-lines1 = data1.split('\n') # 改行で区切る(改行文字そのものは戻り値のデータには含まれない)
-print(type(lines1))
-cntr=0
-for line in lines1:#　#がある行は読み飛ばす
-    idx = line.find("#")
-    if idx != 0:#行の１文字目に#がないものがファイル名
-        cntr = cntr + 1
-        #print(line)
-        if cntr==1:
-            OUTPUT_FILE = line #例：海外18012.xlsx
-        elif cntr==2:
-            SNG_IN_F = line #KMTS2018.12.xlsx
-        elif cntr==3:
-            HNK_IN_F = line #KMTH2018.12.xlsx
-        elif cntr==4:
-            SHA_IN_F = line #KMT上海2018.12.xlsx
-        elif cntr == 5:
-            PHI_IN_F = line #KEFCI2018.12 .xlsx
-        elif cntr == 6:
-            TWN_IN_F = line #KMTT2018.12.xlsx
-        elif cntr == 7:
-            VTN_IN_F = line #KMTV2018.12.xlsx
 
-if deb_flg == 0:
+INPUT_CSV='kaig_ten_input_file.txt'
+#INPUT_CSV=r'C:\Users\86001\PycharmProjects\HelloTensorFlow\kaig_ten_input_file.csv'
+#INPUT_CSV='kaig_ten_input_file.csv'
+
+cntr=0
+with open(INPUT_CSV) as f:
+    reader = csv.reader(f)
+    for row in reader:
+        if row[0] !="#":
+            cntr=cntr+1
+            if cntr==1:
+                OUTPUT_FILE = row[0]  # 例：海外18012.xlsx
+            elif cntr == 2:
+                SNG_IN_F = row[0]  # KMTS2018.12.xlsx
+            elif cntr == 3:
+                HNK_IN_F = row[0]  # KMTH2018.12.xlsx
+            elif cntr == 4:
+                SHA_IN_F = row[0]  # KMT上海2018.12.xlsx
+            elif cntr == 5:
+                PHI_IN_F = row[0]  # KEFCI2018.12 .xlsx
+            elif cntr == 6:
+                TWN_IN_F = row[0]  # KMTT2018.12.xlsx
+            elif cntr == 7:
+                VTN_IN_F = row[0]  # KMTV2018.12.xlsx
+
+if deb_flg == 1:
     print(OUTPUT_FILE)
     print(SNG_IN_F)
     print(HNK_IN_F)
@@ -48,7 +47,6 @@ if deb_flg == 0:
     print(PHI_IN_F)
     print(TWN_IN_F)
     print(VTN_IN_F)
-
 
 #ファイル名
 #------------------------------------------------
@@ -662,7 +660,7 @@ sheet2['O64'] = sheet7['E49'].value
 sheet2['Q64'] = sheet7['F49'].value
 sheet2['S64'] = sheet7['G49'].value
 
-wb2.save('海外18012.xlsx')
+wb2.save(OUTPUT_FILE)
 
 print("*------全てのPLデータの転送が完了しました！------*")
 
