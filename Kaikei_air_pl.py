@@ -1,8 +1,8 @@
 import csv
 import openpyxl
 #-------------------------------------------------#
-#
-#
+#ケイヒン航空の５事業所の会計システムから出力した
+# PLデータ（CSV）を転記する
 #-------------------------------------------------#
 deb_flg =1 # 1:ON 0:OFF
 
@@ -88,7 +88,7 @@ def exec_sales(cnt):#関東・関西営業
     #----------------------------------------------------*
     cntr=0
     with open(FILE_in_sales) as f:
-        next(f)#１行目がブランクだとエラーになるので苦肉の策（２行目から読む）
+        #next(f)#１行目がブランクだとエラーになるので苦肉の策（２行目から読む）
         reader = csv.reader(f)
         for row in reader:
             cntr=cntr+1
@@ -227,7 +227,7 @@ def exec_eigyosho(cnt):#成田・羽田・関空
 
     #転送先セル-------------------------------------------------*
     #収入
-    if cnt==0:#関東営業
+    if cnt==0:#成田
         CC_FEE = "K26" #ＣＣＦＥＥ
         COMITT = "K28" #コミッション
         TESURY = "K29" #手数料
@@ -240,11 +240,36 @@ def exec_eigyosho(cnt):#成田・羽田・関空
         UNSOHI = "K37" #運送費
         TSUKAH = "K38" #通関費
         SONOTH = "K40" #その他費用
-
+    elif cnt==1:#羽田
+        CC_FEE = "P26"  # ＣＣＦＥＥ
+        COMITT = "P28"  # コミッション
+        TESURY = "P29"  # 手数料
+        NYUSYU = "P30"  # 入出庫
+        UNSORO = "P31"  # 運送料
+        TSUKAN = "P32"  # 通関料
+        SONOTA = "P34"  # その他
+        # 費用
+        NYUSYH = "P36"  # 入出庫費
+        UNSOHI = "P37"  # 運送費
+        TSUKAH = "P38"  # 通関費
+        SONOTH = "P40"  # その他費用
+    elif cnt == 2:# 関空
+        CC_FEE = "U26"  # ＣＣＦＥＥ
+        COMITT = "U28"  # コミッション
+        TESURY = "U29"  # 手数料
+        NYUSYU = "U30"  # 入出庫
+        UNSORO = "U31"  # 運送料
+        TSUKAN = "U32"  # 通関料
+        SONOTA = "U34"  # その他
+        # 費用
+        NYUSYH = "U36"  # 入出庫費
+        UNSOHI = "U37"  # 運送費
+        TSUKAH = "U38"  # 通関費
+        SONOTH = "U40"  # その他費用
     #----------------------------------------------------*
     cntr=0
     with open(FILE_eigyosho) as f:
-        next(f)#１行目がブランクだとエラーになるので苦肉の策（２行目から読む）
+        #next(f)#１行目がブランクだとエラーになるので苦肉の策（２行目から読む）
         reader = csv.reader(f)
         for row in reader:
             cntr=cntr+1
@@ -318,8 +343,11 @@ def exec_eigyosho(cnt):#成田・羽田・関空
     sheet2[TSUKAH]=air_322260
     sheet2[SONOTH]=sonota
     wb2.save(FILE_OUT) #ファイルへの書き込み
+#------------------------------------------------------#
+#メインルーチン
+#------------------------------------------------------#
 if __name__ == '__main__':
     for cnt in range(2):
         exec_sales(cnt)#関東・関西営業
-    for cnt in range(1):#本当は4
+    for cnt in range(3):
         exec_eigyosho(cnt)#成田・羽田・関空
