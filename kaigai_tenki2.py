@@ -119,7 +119,8 @@ wb_sh = openpyxl.load_workbook(SHA_IN_F.strip(), data_only=True)
 print("*------上海開始！------*")
 sheet4=wb_sh.get_sheet_by_name("3.PL")#上海PL（インプット）
 for cnt in range(9,48+1):
-    if(cnt<=28):
+    #if(cnt<=28):
+    if (cnt <= 33):
         sheet2['I'+str(cnt)]=sheet4['K'+str(cnt)].value
         sheet2['K'+str(cnt)]=sheet4['L'+str(cnt)].value
         sheet2['M'+str(cnt)]=sheet4['M'+str(cnt)].value
