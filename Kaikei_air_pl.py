@@ -5,7 +5,9 @@ import openpyxl
 # PLデータ（CSV）を転記する
 #-------------------------------------------------#
 deb_flg =1 # 1:ON 0:OFF
-
+#------------------------------------------------------#
+#関東・関西営業
+#------------------------------------------------------#
 def exec_sales(cnt):#関東・関西営業
     if cnt==0:#関東営業
         FILE_in_sales = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年04月分_902010_9021営業課_6桁損益計算書FILE.csv'
@@ -180,7 +182,9 @@ def exec_sales(cnt):#関東・関西営業
     #営業----------------------------------------------------*
 
     wb2.save(FILE_OUT) #ファイルへの書き込み
-
+#------------------------------------------------------#
+#成田・羽田・関空
+#------------------------------------------------------#
 def exec_eigyosho(cnt):#成田・羽田・関空
     if cnt==0:#成田
         FILE_eigyosho = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年04月分_902016_9025成田営業所_6桁損益計算書FILE.csv'
@@ -326,7 +330,7 @@ def exec_eigyosho(cnt):#成田・羽田・関空
     #------------------------------------------------------------------------
     FILE_OUT = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年度(第31期)営業収支実績.xlsx'
     wb2 = openpyxl.load_workbook(FILE_OUT)
-    print(wb2.get_sheet_names())
+    #print(wb2.get_sheet_names())
     print("*------2019年度(第31期)営業収支実績.xlsx------*")
     sheet2=wb2.get_sheet_by_name("4月")
 
@@ -344,10 +348,55 @@ def exec_eigyosho(cnt):#成田・羽田・関空
     sheet2[SONOTH]=sonota
     wb2.save(FILE_OUT) #ファイルへの書き込み
 #------------------------------------------------------#
+#管理費配賦・業績評価
+#------------------------------------------------------#
+def kanrihi_gyoseki_hyoka():
+    #管理費配賦
+    Haifu_F='C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/配賦基準（2019年度）.xlsx'
+    wb_knr = openpyxl.load_workbook(Haifu_F, data_only=True)
+    #業績評価
+    Haifu_G='C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/ケイヒン航空4月分 営業収支(業績評価用)予算実績比較表.xlsx'
+    wb_gyoseki = openpyxl.load_workbook(Haifu_G, data_only=True)
+    #
+    FILE_OUT = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年度(第31期)営業収支実績.xlsx'
+    wb2 = openpyxl.load_workbook(FILE_OUT)
+    print("*------営業収支実績------*")
+    sheet2=wb2.get_sheet_by_name("4月")
+
+    print("*------配賦セット！------*")
+    sheet_wk = wb_knr.get_sheet_by_name("4月")  #管理費配賦表
+    sheet2['F48'] = sheet_wk['G8'].value#関東営業
+    sheet2['P48'] = sheet_wk['G9'].value#羽田
+    sheet2['K48'] = sheet_wk['G10'].value#成田
+    sheet2['Z48'] = sheet_wk['G12'].value#関西営業
+    sheet2['U48'] = sheet_wk['G13'].value#関空
+    #sheet2['F48']=kanri_kant_e#関東営業
+    #sheet2['P48'] = kanri_haneda#羽田
+    #sheet2['K48'] = kanri_narita#成田
+    #sheet2['Z48'] = kanri_kans_e#関西営業
+    #sheet2['U48'] = kanri_kankuu#関空
+
+    print("*------業績セット！------*")
+    sheet_wk = wb_gyoseki.get_sheet_by_name("Sheet1")  #業績表
+    sheet2['F46'] = round(sheet_wk['P53'].value/1000)#関東営業
+    sheet2['K46'] = round(sheet_wk['Z53'].value/1000)#成田
+    sheet2['P46'] = round(sheet_wk['AE53'].value/1000)#羽田
+    sheet2['Z46'] = round(sheet_wk['AJ53'].value/1000)#関西営業
+    sheet2['U46'] = round(sheet_wk['AO53'].value/1000)#関空
+
+    wb2.save(FILE_OUT) #ファイルへの書き込み
+    #print("関東営業：",kanri_kant_e)
+    #print("羽田　　：",kanri_haneda)
+    #print("成田　　：",kanri_narita)
+    #print("関西営業：",kanri_kans_e)
+    #print("関空　　：",kanri_kankuu)
+
+#------------------------------------------------------#
 #メインルーチン
 #------------------------------------------------------#
 if __name__ == '__main__':
     for cnt in range(2):
-        exec_sales(cnt)#関東・関西営業
+        exec_sales(cnt)#関東・関西営業PLセット
     for cnt in range(3):
-        exec_eigyosho(cnt)#成田・羽田・関空
+        exec_eigyosho(cnt)#成田・羽田・関空PLセット
+    kanrihi_gyoseki_hyoka()#管理費配賦・業績評価
