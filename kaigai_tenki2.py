@@ -15,8 +15,6 @@ pyautogui.alert("海外現法PLデータ転記を開始します","Excel_Move_Dt
 #ファイル名処理-----------------------------------------------------------*
 
 INPUT_CSV='kaig_ten_input_file.txt'
-#INPUT_CSV=r'C:\Users\86001\PycharmProjects\HelloTensorFlow\kaig_ten_input_file.csv'
-#INPUT_CSV='kaig_ten_input_file.csv'
 
 cntr=0
 with open(INPUT_CSV) as f:

@@ -1,18 +1,82 @@
 import csv
 import openpyxl
+import sys
 #-------------------------------------------------#
 #ケイヒン航空の５事業所の会計システムから出力した
 # PLデータ（CSV）を転記する
 #-------------------------------------------------#
 deb_flg =1 # 1:ON 0:OFF
+
+#Global変数
+OUTPUT_FILE = ""# 営業実績
+AIR_KANT_EIGYO_=""# 関東営業
+AIR_NARITA_F=""# 成田
+AIR_HANED_F =""# 羽田
+AIR_KANS_EIGYO_F = ""#関西営業
+AIR_KANKU_F = "" # 関空
+AIR_GYOSEKI_F = "" # 業績ファイル
+AIR_HAIFU_F = "" # 配賦ファイル
+AIR_TSUKI = "" # 計上月（営業実績のタブ指定）
+
+#------------------------------------------------------#
+#初期処理
+#------------------------------------------------------#
+def initial():
+    global OUTPUT_FILE
+    global AIR_KANT_EIGYO_F
+    global AIR_NARITA_F
+    global AIR_HANED_F
+    global AIR_KANS_EIGYO_F
+    global AIR_KANKU_F
+    global AIR_GYOSEKI_F
+    global AIR_HAIFU_F
+    global AIR_TSUKI
+
+    INPUT_CSV=r'C:\k-net\航空PL\kakei_air_pl_initial.txt'
+    cntr=0
+    with open(INPUT_CSV) as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if row[0] !="#":
+                cntr=cntr+1
+                if cntr==1:
+                    OUTPUT_FILE = "c:/k-net/航空pl/"+row[0]  # 例：営業実績
+                elif cntr == 2:
+                    AIR_KANT_EIGYO_F = "c:/k-net/航空pl/"+row[0]  # 関東営業
+                elif cntr == 3:
+                    AIR_NARITA_F = "c:/k-net/航空pl/"+row[0]  # 成田
+                elif cntr == 4:
+                    AIR_HANED_F = "c:/k-net/航空pl/"+row[0]  # 羽田
+                elif cntr == 5:
+                    AIR_KANS_EIGYO_F = "c:/k-net/航空pl/"+row[0]  # 関西営業
+                elif cntr == 6:
+                    AIR_KANKU_F = "c:/k-net/航空pl/"+row[0]  # 関空
+                elif cntr == 7:
+                    AIR_GYOSEKI_F = "c:/k-net/航空pl/"+row[0]  # 業績
+                elif cntr == 8:
+                    AIR_HAIFU_F = "c:/k-net/航空pl/"+row[0]  # 配賦
+                elif cntr == 9:
+                    AIR_TSUKI = row[0]  # 計上月
+
+    #print("営業実績",OUTPUT_FILE)
+    #print("関東営業",AIR_KANT_EIGYO_F)
+    #print("成田",AIR_NARITA_F)
+    #print("羽田",AIR_HANED_F)
+    #print("関西営業",AIR_KANS_EIGYO_F)
+    #print("関空",AIR_KANKU_F)
+
+    #sys.exit()
+
 #------------------------------------------------------#
 #関東・関西営業
 #------------------------------------------------------#
 def exec_sales(cnt):#関東・関西営業
+
     if cnt==0:#関東営業
-        FILE_in_sales = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年04月分_902010_9021営業課_6桁損益計算書FILE.csv'
+        FILE_in_sales = AIR_KANT_EIGYO_F
     else:#関西営業
-        FILE_in_sales=r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年04月分_903018_9031関西営業課_6桁損益計算書FILE.csv'
+        FILE_in_sales = AIR_KANS_EIGYO_F
+    #sys.exit()
 
     AC_AIR_32111 = "32111" #航空輸出収益  混載
     AC_AIR_32112 = "32112" #航空輸出収益  一般
@@ -160,11 +224,11 @@ def exec_sales(cnt):#関東・関西営業
         print("支出合計：", outcom_sum)#支出計
         print("差益：", prft)#差益
     #------------------------------------------------------------------------
-    FILE_OUT = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年度(第31期)営業収支実績.xlsx'
-    wb2 = openpyxl.load_workbook(FILE_OUT)
+    wb2 = openpyxl.load_workbook(OUTPUT_FILE)
     print(wb2.get_sheet_names())
     print("*------2019年度(第31期)営業収支実績.xlsx------*")
-    sheet2=wb2.get_sheet_by_name("4月")
+    #sheet2=wb2.get_sheet_by_name("4月")
+    sheet2 = wb2.get_sheet_by_name(AIR_TSUKI)
 
     sheet2[KONSAI]=air_32111
     sheet2[TESURY]=air_32112
@@ -181,17 +245,17 @@ def exec_sales(cnt):#関東・関西営業
     sheet2[SONOTH]=air_32128+air_32125
     #営業----------------------------------------------------*
 
-    wb2.save(FILE_OUT) #ファイルへの書き込み
+    wb2.save(OUTPUT_FILE) #ファイルへの書き込み
 #------------------------------------------------------#
 #成田・羽田・関空
 #------------------------------------------------------#
 def exec_eigyosho(cnt):#成田・羽田・関空
     if cnt==0:#成田
-        FILE_eigyosho = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年04月分_902016_9025成田営業所_6桁損益計算書FILE.csv'
+        FILE_eigyosho = AIR_NARITA_F
     elif cnt==1:#羽田
-        FILE_eigyosho = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年04月分_902018_9024羽田空港営業所_6桁損益計算書FILE.csv'
+        FILE_eigyosho = AIR_HANED_F
     elif cnt==2:#関空
-        FILE_eigyosho = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年04月分_903019_9034関西空港営業所_6桁損益計算書FILE.csv'
+        FILE_eigyosho = AIR_KANKU_F
 
     AC_AIR_322111 = "322111" #混載手数料その１
     AC_AIR_322112 = "322112" #混載手数料その２
@@ -328,11 +392,10 @@ def exec_eigyosho(cnt):#成田・羽田・関空
     sonota = round((air_322250 + air_322289)/1000)
 
     #------------------------------------------------------------------------
-    FILE_OUT = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年度(第31期)営業収支実績.xlsx'
-    wb2 = openpyxl.load_workbook(FILE_OUT)
-    #print(wb2.get_sheet_names())
+    wb2 = openpyxl.load_workbook(OUTPUT_FILE)
     print("*------2019年度(第31期)営業収支実績.xlsx------*")
-    sheet2=wb2.get_sheet_by_name("4月")
+    #sheet2=wb2.get_sheet_by_name("4月")
+    sheet2=wb2.get_sheet_by_name(AIR_TSUKI)
 
     sheet2[CC_FEE] = ccfee
     sheet2[COMITT]=air_322112
@@ -346,25 +409,26 @@ def exec_eigyosho(cnt):#成田・羽田・関空
     sheet2[UNSOHI]=itk_unso
     sheet2[TSUKAH]=air_322260
     sheet2[SONOTH]=sonota
-    wb2.save(FILE_OUT) #ファイルへの書き込み
+    wb2.save(OUTPUT_FILE) #ファイルへの書き込み
 #------------------------------------------------------#
 #管理費配賦・業績評価
 #------------------------------------------------------#
 def kanrihi_gyoseki_hyoka():
     #管理費配賦
-    Haifu_F='C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/配賦基準（2019年度）.xlsx'
+    Haifu_F=AIR_HAIFU_F
     wb_knr = openpyxl.load_workbook(Haifu_F, data_only=True)
     #業績評価
-    Haifu_G='C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/ケイヒン航空4月分 営業収支(業績評価用)予算実績比較表.xlsx'
+    Haifu_G=AIR_GYOSEKI_F
     wb_gyoseki = openpyxl.load_workbook(Haifu_G, data_only=True)
-    #
-    FILE_OUT = r'C:/Users/86001/PycharmProjects/HelloTensorFlow/2019年4月航空/2019年度(第31期)営業収支実績.xlsx'
-    wb2 = openpyxl.load_workbook(FILE_OUT)
+    wb2 = openpyxl.load_workbook(OUTPUT_FILE)
     print("*------営業収支実績------*")
-    sheet2=wb2.get_sheet_by_name("4月")
+    #sheet2=wb2.get_sheet_by_name("4月")
+    sheet2=wb2.get_sheet_by_name(AIR_TSUKI)
 
     print("*------配賦セット！------*")
-    sheet_wk = wb_knr.get_sheet_by_name("4月")  #管理費配賦表
+    #sheet_wk = wb_knr.get_sheet_by_name("4月")  #管理費配賦表
+    sheet_wk = wb_knr.get_sheet_by_name(AIR_TSUKI)  # 管理費配賦表
+
     sheet2['F48'] = sheet_wk['G8'].value#関東営業
     sheet2['P48'] = sheet_wk['G9'].value#羽田
     sheet2['K48'] = sheet_wk['G10'].value#成田
@@ -384,17 +448,13 @@ def kanrihi_gyoseki_hyoka():
     sheet2['Z46'] = round(sheet_wk['AJ53'].value/1000)#関西営業
     sheet2['U46'] = round(sheet_wk['AO53'].value/1000)#関空
 
-    wb2.save(FILE_OUT) #ファイルへの書き込み
-    #print("関東営業：",kanri_kant_e)
-    #print("羽田　　：",kanri_haneda)
-    #print("成田　　：",kanri_narita)
-    #print("関西営業：",kanri_kans_e)
-    #print("関空　　：",kanri_kankuu)
+    wb2.save(OUTPUT_FILE) #ファイルへの書き込み
 
 #------------------------------------------------------#
 #メインルーチン
 #------------------------------------------------------#
 if __name__ == '__main__':
+    initial()#初期処理
     for cnt in range(2):
         exec_sales(cnt)#関東・関西営業PLセット
     for cnt in range(3):
