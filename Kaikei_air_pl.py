@@ -1,6 +1,7 @@
 import csv
 import openpyxl
 import sys
+import pyautogui
 #-------------------------------------------------#
 #ケイヒン航空の５事業所の会計システムから出力した
 # PLデータ（CSV）を転記する
@@ -58,14 +59,6 @@ def initial():
                 elif cntr == 9:
                     AIR_TSUKI = row[0]  # 計上月
 
-    #print("営業実績",OUTPUT_FILE)
-    #print("関東営業",AIR_KANT_EIGYO_F)
-    #print("成田",AIR_NARITA_F)
-    #print("羽田",AIR_HANED_F)
-    #print("関西営業",AIR_KANS_EIGYO_F)
-    #print("関空",AIR_KANKU_F)
-
-    #sys.exit()
 
 #------------------------------------------------------#
 #関東・関西営業
@@ -187,21 +180,22 @@ def exec_sales(cnt):#関東・関西営業
             elif(AC_AIR_32128 in row[ACCOUNT_POS]):#航空輸出費用  その他"
                 air_32128=air_32128+ int(row[TOGETSU_POS]) #当月金額
 
-    air_32111 = round(air_32111/1000)
-    air_32112 = round(air_32112/1000)
-    air_32113 = round(air_32113/1000)
-    air_32114 = round(air_32114/1000)
-    air_32116 = round(air_32116/1000)
-    air_32117 = round(air_32117/1000)
-    air_32119 = round(air_32119/1000)
+    air_32111=Ushiro_five_handred_rounding_off(air_32111)
+    air_32112=Ushiro_five_handred_rounding_off(air_32112)
+    air_32113=Ushiro_five_handred_rounding_off(air_32113)
+    air_32114=Ushiro_five_handred_rounding_off(air_32114)
+    air_32116=Ushiro_five_handred_rounding_off(air_32116)
+    air_32117=Ushiro_five_handred_rounding_off(air_32117)
+    air_32119=Ushiro_five_handred_rounding_off(air_32119)
     incom_sum = air_32111+air_32112+air_32113+air_32114+air_32116+air_32117+air_32119#収入合計:転記不要
-    air_32121 = round(air_32121/1000)
-    air_32123 = round(air_32123/1000)
-    air_32124 = round(air_32124/1000)
-    air_32125 = round(air_32125/1000)
-    air_32126 = round(air_32126/1000)
-    air_32127 = round(air_32127/1000)
-    air_32128 = round(air_32128/1000)
+    air_32121=Ushiro_five_handred_rounding_off(air_32121)
+    air_32123=Ushiro_five_handred_rounding_off(air_32123)
+    air_32124=Ushiro_five_handred_rounding_off(air_32124)
+    air_32125=Ushiro_five_handred_rounding_off(air_32125)
+    air_32126=Ushiro_five_handred_rounding_off(air_32126)
+    air_32127=Ushiro_five_handred_rounding_off(air_32127)
+    air_32128=Ushiro_five_handred_rounding_off(air_32128)
+
     outcom_sum = air_32121+air_32123+air_32124+air_32125+air_32127+air_32128 #支出合計：転記不要
 
     prft = incom_sum - outcom_sum #差益：転記不要
@@ -371,30 +365,23 @@ def exec_eigyosho(cnt):#成田・羽田・関空
             elif(AC_AIR_322289 in row[ACCOUNT_POS]):#航空輸出収益  その他
                 air_322289=air_322289+ int(row[TOGETSU_POS]) #当月金額
 
-    air_322111 = round(air_322111/1000)
-    air_322112 = round(air_322112/1000)
-   #air_322114 = round(air_322114/1000)
-   #air_322118 = round(air_322118/1000)
-    air_322130 = round(air_322130/1000)
-    air_322140 = round(air_322140/1000)
-    air_322160 = round(air_322160/1000)
-    air_322190 = round(air_322190/1000)
+    air_322111=Ushiro_five_handred_rounding_off(air_322111)
+    air_322112=Ushiro_five_handred_rounding_off(air_322112)
+    air_322130=Ushiro_five_handred_rounding_off(air_322130)
+    air_322140=Ushiro_five_handred_rounding_off(air_322140)
+    air_322160=Ushiro_five_handred_rounding_off(air_322160)
+    air_322190=Ushiro_five_handred_rounding_off(air_322190)
 
-    air_322230 = round(air_322230/1000)
-   #air_322241 = round(air_322241/1000)
-   #air_322242 = round(air_322242/1000)
-   #air_322250 = round(air_322250/1000)
-    air_322260 = round(air_322260/1000)
-   #air_322289 = round(air_322289/1000)
+    air_322230=Ushiro_five_handred_rounding_off(air_322230)
+    air_322260=Ushiro_five_handred_rounding_off(air_322260)
 
-    ccfee = round((air_322114 + air_322118)/1000)
-    itk_unso = round((air_322241+air_322242)/1000)
-    sonota = round((air_322250 + air_322289)/1000)
+    ccfee=Ushiro_five_handred_rounding_off(air_322114 + air_322118)
+    itk_unso=Ushiro_five_handred_rounding_off((air_322241+air_322242))
+    sonota=Ushiro_five_handred_rounding_off(air_322250 + air_322289)
 
     #------------------------------------------------------------------------
     wb2 = openpyxl.load_workbook(OUTPUT_FILE)
     print("*------2019年度(第31期)営業収支実績.xlsx------*")
-    #sheet2=wb2.get_sheet_by_name("4月")
     sheet2=wb2.get_sheet_by_name(AIR_TSUKI)
 
     sheet2[CC_FEE] = ccfee
@@ -422,11 +409,9 @@ def kanrihi_gyoseki_hyoka():
     wb_gyoseki = openpyxl.load_workbook(Haifu_G, data_only=True)
     wb2 = openpyxl.load_workbook(OUTPUT_FILE)
     print("*------営業収支実績------*")
-    #sheet2=wb2.get_sheet_by_name("4月")
     sheet2=wb2.get_sheet_by_name(AIR_TSUKI)
 
     print("*------配賦セット！------*")
-    #sheet_wk = wb_knr.get_sheet_by_name("4月")  #管理費配賦表
     sheet_wk = wb_knr.get_sheet_by_name(AIR_TSUKI)  # 管理費配賦表
 
     sheet2['F48'] = sheet_wk['G8'].value#関東営業
@@ -434,11 +419,6 @@ def kanrihi_gyoseki_hyoka():
     sheet2['K48'] = sheet_wk['G10'].value#成田
     sheet2['Z48'] = sheet_wk['G12'].value#関西営業
     sheet2['U48'] = sheet_wk['G13'].value#関空
-    #sheet2['F48']=kanri_kant_e#関東営業
-    #sheet2['P48'] = kanri_haneda#羽田
-    #sheet2['K48'] = kanri_narita#成田
-    #sheet2['Z48'] = kanri_kans_e#関西営業
-    #sheet2['U48'] = kanri_kankuu#関空
 
     print("*------業績セット！------*")
     sheet_wk = wb_gyoseki.get_sheet_by_name("Sheet1")  #業績表
@@ -449,14 +429,29 @@ def kanrihi_gyoseki_hyoka():
     sheet2['U46'] = round(sheet_wk['AO53'].value/1000)#関空
 
     wb2.save(OUTPUT_FILE) #ファイルへの書き込み
+#--------------------------------------------------#
+# 値の後ろ3桁が500のとき、四捨五入が効かないので強引に
+# 501にして、四捨五入を効かす関数
+# 例：☓2466500→2466 　○2466500→2467
+#--------------------------------------------------#
+def Ushiro_five_handred_rounding_off(val):
+    #val = 2466500
+    m_val = str(val)#文字列に変換
+    last_3_keta = m_val[-3:]
+    if last_3_keta == '500':
+        val = val + 1
+    val = round(val / 1000)
+    return val
 
 #------------------------------------------------------#
 #メインルーチン
 #------------------------------------------------------#
 if __name__ == '__main__':
+    pyautogui.alert('ケイヒン航空PL転記システムをスタートします')
     initial()#初期処理
     for cnt in range(2):
         exec_sales(cnt)#関東・関西営業PLセット
     for cnt in range(3):
         exec_eigyosho(cnt)#成田・羽田・関空PLセット
     kanrihi_gyoseki_hyoka()#管理費配賦・業績評価
+    pyautogui.alert('システムが終了しました')
