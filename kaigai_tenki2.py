@@ -125,6 +125,7 @@ for cnt in range(9,48+1):
         sheet2['O'+str(cnt)]=sheet4['N'+str(cnt)].value
         sheet2['Q'+str(cnt)]=sheet4['O'+str(cnt)].value
         sheet2['S'+str(cnt)]=sheet4['P'+str(cnt)].value
+        #print("DATA",cnt,sheet2['I'+str(cnt)].value)
     # elif(cnt>=34 and cnt <=41):
     elif (cnt >= 34 and cnt <= 42):
         sheet2['I'+str(cnt+10)]=sheet4['K'+str(cnt)].value
@@ -133,6 +134,7 @@ for cnt in range(9,48+1):
         sheet2['O'+str(cnt+10)]=sheet4['N'+str(cnt)].value
         sheet2['Q'+str(cnt+10)]=sheet4['O'+str(cnt)].value
         sheet2['S'+str(cnt+10)]=sheet4['P'+str(cnt)].value
+        #print("DATA",cnt+10,sheet2['I'+str(cnt+10)].value)
     elif(cnt==43):
         sheet2['I'+str(cnt+10)]=sheet4['K'+str(cnt)].value
         sheet2['K'+str(cnt+10)]=sheet4['L'+str(cnt)].value
@@ -140,6 +142,7 @@ for cnt in range(9,48+1):
         sheet2['O'+str(cnt+10)]=sheet4['N'+str(cnt)].value
         sheet2['Q'+str(cnt+10)]=sheet4['O'+str(cnt)].value
         sheet2['S'+str(cnt+10)]=sheet4['P'+str(cnt)].value
+        #print("DATA",cnt+10,sheet2['I'+str(cnt+10)].value)
     elif (cnt >=46):
         sheet2['I'+str(cnt+10)]=sheet4['K'+str(cnt)].value
         sheet2['K'+str(cnt+10)]=sheet4['L'+str(cnt)].value
@@ -147,6 +150,7 @@ for cnt in range(9,48+1):
         sheet2['O'+str(cnt+10)]=sheet4['N'+str(cnt)].value
         sheet2['Q'+str(cnt+10)]=sheet4['O'+str(cnt)].value
         sheet2['S'+str(cnt+10)]=sheet4['P'+str(cnt)].value
+        #print("DATA",cnt+10,sheet2['I'+str(cnt+10)].value)
 #print("I52",sheet2['I52'].value)
 
 #フィリピン----------------------------------------------------*
